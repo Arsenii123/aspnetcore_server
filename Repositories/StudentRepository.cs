@@ -1,4 +1,4 @@
-﻿using Firebase.Database; // dotnet add package FirebaseDatabase.net
+using Firebase.Database; // dotnet add package FirebaseDatabase.net
 using Firebase.Database.Query;
 using mvc.Repositories.Interfaces;
 
@@ -14,8 +14,11 @@ namespace mvc.Repository
 
         public StudentRepository(IConfiguration config)
         {
-            string databaseUrl = config["Firebase:DatabaseUrl"]
-                ?? throw new InvalidOperationException("Firebase:DatabaseUrl не налаштовано в appsettings.json.");
+            // Перевіряємо всі можливі ключі конфігурації
+            string databaseUrl = config["FIREBASE_DATABASE_URL"]
+                ?? config["Firebase__DatabaseUrl"]
+                ?? config["Firebase:DatabaseUrl"]
+                ?? throw new InvalidOperationException("Firebase Database URL не налаштовано в змінних оточення чи appsettings.json.");
 
             _firebaseClient = new FirebaseClient(databaseUrl);
 
